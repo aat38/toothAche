@@ -1,0 +1,1 @@
+ladders_01.png.png 133 106, ladders_02.png.png 383 83, ladders_03.png.png 636 106.

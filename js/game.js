@@ -2,7 +2,7 @@ var config = {
   type: Phaser.AUTO, 
   width: 800,
   height: 600,
-  backgroundColor: "#5DADE2", 
+  backgroundColor: "#00D7FB", 
   pixelArt: true,
   onVisible: true,
   scene: {
@@ -32,7 +32,7 @@ var plaques =[3];
 var period = 1;//plaq spawn (sec)
 var start = new Date();
 var player;
-var track;
+var braces;
 var enemies;
 var decayedTeeth = 0;
 var maximumAllowedDecay =3;
@@ -46,12 +46,13 @@ function preload ()
 {
   this.load.atlas('sprites','assests/sprites.png','assests/sprites.json');
   this.load.image('gums', 'assests/gums.png');
-  this.load.image('track','assests/scaffolding.png');
+  this.load.image('braces','assests/braces.png');
 }
 
 function create (){ /////////////////////////////////////////////start create
   this.spaceKey = this.input.keyboard.addKey(32);
   this.input.keyboard.addKeyCapture([32]);
+
   let bg = this.add.sprite(0, 0, 'gums');
   bg.setOrigin(0,0);
 
@@ -87,22 +88,17 @@ function create (){ /////////////////////////////////////////////start create
   player = this.physics.add.sprite(200, 450, 'sprites','spritesheet_01.png');
   player.enableBody = true;
   player.body.collideWorldBounds = true;
-  player.body.gravity.y = 500;
+  player.body.gravity.y = 300;
   player.setScale(4);
   player.depth = 50;
 
-  // this.platforms = this.add.physicsGroup();
-  // this.platforms.create(0,50,'track');
-  // this.platforms.setAll('body.allowGravity', false);
-  // this.platforms.setAll('body.immovable', true);
-  //player.play('walk');
-  // track = this.physics.add.sprite(0,50,'track');
-  // track.setOrigin(0,0);
-  // track.enableBody = true;
-  // track.body.immovable = true;
-  // track.body.allowGravity = false;
+  braces = this.physics.add.sprite(0, 0, 'braces');
+  braces.setOrigin(0,0);
+  braces.enableBody = true;
+  braces.body.allowGravity = false;
+  braces.body.immovable = true;
 
-    // enemy group
+  // enemy group (baddies)
   enemies = this.physics.add.group();
   enemies.enableBody = true;
   enemies.physicsBodyType = Phaser.Physics.ARCADE;
@@ -236,7 +232,7 @@ function genPlaq(teeth,tooth,ctx){
         toof.plaques[toof.plaques.length]= grimeyName;
       }
     }
-     if (toof.spawned){
+     if (toof.spawned && toof.plaques){
       //remove the tooth and its plaque
       toof.visible=false;
       if(toof.plaques.length>0){
@@ -265,7 +261,6 @@ function baddieSpawn(x,y,ctx){
   e.beenHit=0;
 }
 
-
 function update() { ////////////////////////////////////////////////////////// update
   var timeElapsed = new Date();
   var delta = (timeElapsed.getSeconds() - start.getSeconds());
@@ -281,7 +276,7 @@ function update() { ////////////////////////////////////////////////////////// u
 
   if(decayedTeeth > maximumAllowedDecay || damage >= maxDamage){
     //game over
-    //this.scene.start('endGame');
+    //this.scene.start('endGame');???
   }
 
   if (enemies.children.entries.length >= 1){
@@ -317,6 +312,7 @@ function update() { ////////////////////////////////////////////////////////// u
   }
 
   if(teeth.length >=1){
+  //scrub if over a tooth that has plaque and player is idling with brush near tooth's origin
     // for(let i = 0; i< teeth.length; i++) {
   //if ((this.physics.overlap(player, teeth[i])==true) &&(player.body.velocity.x==0) && (brush==true) && (teeth[i].plaques["length"]>0)){        
       //Scrub off plaque from tooth
@@ -325,7 +321,9 @@ function update() { ////////////////////////////////////////////////////////// u
     //}
   }
 
-
+  if (this.physics.overlap(player, braces)){
+    //
+  }
 
  if (Phaser.Input.Keyboard.JustDown(this.spaceKey)){
       brush=!brush;
@@ -366,5 +364,5 @@ function update() { ////////////////////////////////////////////////////////// u
 }
 
 function endGame(){
-
+//
 }

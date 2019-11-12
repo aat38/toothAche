@@ -274,12 +274,7 @@ function update() { ////////////////////////////////////////////////////////// u
     start = new Date();
   }
 
-  if(decayedTeeth > maximumAllowedDecay || damage >= maxDamage){
-    //game over
-    //this.scene.start('endGame');???
-  }
-
-  if (enemies.children.entries.length >= 1){
+    if (enemies.children.entries.length >= 1){
     var badKids=enemies.getChildren();
     for(let i = 0; i< badKids.length; i++) {
       if (this.physics.overlap(player, badKids[i])==true){
@@ -360,6 +355,10 @@ function update() { ////////////////////////////////////////////////////////// u
   }
   if(cursors.up.isDown && player.body.onFloor() && brush == false){
     player.body.setVelocityY(-600); 
+  }
+  if(decayedTeeth > maximumAllowedDecay || damage >= maxDamage){
+    //game over
+    endGame();
   }
 }
 

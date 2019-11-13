@@ -27,9 +27,9 @@ class EndScene extends Phaser.Scene {
         this.tooth.setInteractive();
         this.tooth.on('pointerdown', () => this.clickButton());
 
-        this.text = this.add.text(310, 260, "Oh no! You\'ve lost.\n\t\t\t\t\t\t\t:( \nClick to play again");
-        this.text.setFill('#ffa500')
-        this.text.setStroke('#ffa500', 2.5)
+        this.text = this.add.text(310, 260, "Oh no! You\'ve lost.\n\t\t\t\t\t\t\t :( \nClick to play again");
+        this.text.setFill('#ffa500');
+        this.text.setStroke('#ffa500', 2.5);
     }
 }
 

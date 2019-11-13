@@ -3,7 +3,7 @@ class GameScene extends Phaser.Scene {
     constructor() {
         super({ key: 'gameScene' });
     }
-    init() {
+    init() { /////////////////////////////////////////////////////////////////////////////////////
         this.cursors;
         this.spaceKey;
         this.timeElapsed;
@@ -21,13 +21,13 @@ class GameScene extends Phaser.Scene {
         this.maxDamage = 100;
     }
 
-    preload() {
+    preload() { /////////////////////////////////////////////////////////////////////////////////
         this.load.atlas('sprites', 'assests/sprites.png', 'assests/sprites.json');
         this.load.image('gums', 'assests/gums.png');
         this.load.image('braces', 'assests/braces.png');
     }
 
-    create() {
+    create() {  /////////////////////////////////////////////////////////////////////////////////
         //this.input.keyboard.addKeyCapture([32]);
         this.cursors = this.input.keyboard.createCursorKeys();
         this.spaceKey = this.input.keyboard.addKey(32);
@@ -71,6 +71,7 @@ class GameScene extends Phaser.Scene {
         this.player.setScale(4);
         this.player.depth = 50;
 
+        //platform
         this.braces = this.physics.add.sprite(0, 0, 'braces');
         this.braces.setOrigin(0, 0);
         this.braces.enableBody = true;
@@ -82,6 +83,7 @@ class GameScene extends Phaser.Scene {
         this.enemies.enableBody = true;
         this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
 
+        //player anim
         this.anims.create({
             key: 'walk',
             repeat: -1,
@@ -95,19 +97,7 @@ class GameScene extends Phaser.Scene {
             })
         })
 
-        this.anims.create({
-            key: 'chew',
-            repeat: -1,
-            frameRate: 5,
-            frames: this.anims.generateFrameNames('sprites', {
-                prefix: 'spritesheet_',
-                suffix: '.png',
-                start: 11,
-                end: 13,
-                zeroPad: 2
-            })
-        });
-
+        //player anim
         this.anims.create({
             key: 'idleBrush',
             repeat: -1,
@@ -121,6 +111,7 @@ class GameScene extends Phaser.Scene {
             })
         });
 
+        //player anim
         this.anims.create({
             key: 'walkBrush',
             repeat: -1,
@@ -134,6 +125,22 @@ class GameScene extends Phaser.Scene {
             })
         });
 
+        //player anim
+        this.anims.create({
+            key: 'scrubBrush',
+            repeat: 0,
+            frameRate: 5,
+            hideOnComplete: true,
+            frames: this.anims.generateFrameNames('sprites', {
+                prefix: 'spritesheet_',
+                suffix: '.png',
+                start: 7,
+                end: 8,
+                zeroPad: 2
+            })
+        });
+
+        //player anim
         this.anims.create({
             key: 'idleSword',
             repeat: -1,
@@ -147,6 +154,7 @@ class GameScene extends Phaser.Scene {
             })
         });
 
+        //player anim
         this.anims.create({
             key: 'walkSword',
             repeat: -1,
@@ -160,8 +168,9 @@ class GameScene extends Phaser.Scene {
             })
         });
 
+        //tooth paste effect
         this.anims.create({
-            key: 'scrub',
+            key: 'cloud',
             repeat: 0,
             frameRate: 5,
             hideOnComplete: true,
@@ -173,9 +182,23 @@ class GameScene extends Phaser.Scene {
                 zeroPad: 2
             })
         });
+
+        //enemy anim
+        this.anims.create({
+            key: 'chew',
+            repeat: -1,
+            frameRate: 5,
+            frames: this.anims.generateFrameNames('sprites', {
+                prefix: 'spritesheet_',
+                suffix: '.png',
+                start: 11,
+                end: 13,
+                zeroPad: 2
+            })
+        });
     }
 
-    update() {
+    update() { //////////////////////////////////////////////////////////////////////////////////
         var timeElapsed = new Date();
         var delta = (timeElapsed.getSeconds() - this.start.getSeconds());
         if (delta < 0) {
@@ -275,7 +298,8 @@ class GameScene extends Phaser.Scene {
             this.endGame()
         }
     }
-    //functions////////////////////////////////////////////////////////////////
+
+    //functions//////////////////////////////////////////////////////////////////////////////////
     collideEnemy(badKid) {
         if (badKid.body.touching.left) {
             badKid.x = badKid.x + 150;
@@ -333,11 +357,10 @@ class GameScene extends Phaser.Scene {
         e.body.velocity.x = -250;
         e.beenHit = 0;
     }
+
     endGame() {
         this.scene.start('endScene');
     }
-    ///////////////////////////////////////////////////////////////////////////////
 }
-
 
 export default GameScene;

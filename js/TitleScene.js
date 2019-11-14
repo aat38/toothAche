@@ -4,13 +4,14 @@ class TitleScene extends Phaser.Scene {
         super({ key: 'titleScene' });
     }
 
-    init() {
+    init(data) {
+        this.game = data;
         this.start = new Date();
         this.tooth;
         this.player;
         this.plaque;
         this.baddie;
-        this.toofTween;
+        this.mus;
     }
 
     preload() {
@@ -18,19 +19,25 @@ class TitleScene extends Phaser.Scene {
         this.load.image('tooth', 'assests/spritesheet_22.png');
         this.load.image('title', 'assests/title.png');
         this.load.image('plaque', 'assests/spritesheet_32.png');
+        this.load.audio('song', 'assests/audio/DJ Nervous - Lurking.mp3')
     }
 
     create() {
+        this.mus = this.sound.add('song', this.config);
+        this.mus.play();
+
         var title = this.add.sprite(250, 0, 'title');
-        var Titletween = {
+        this.tweens.add({
+            //title swing in 
             targets: title,
             props: {
                 x: { value: '+=150', duration: 3000, ease: 'Power4' },
                 y: { value: '300', duration: 1500, ease: 'Bounce.easeOut' }
             },
             repeat: 0
-        };
-        this.tweens.add(Titletween)
+        });
+
+        //tooth & plaque fade in 
         this.tooth = this.add.sprite(400, 400, 'tooth');
         this.tooth.alpha = 0;
 
@@ -38,6 +45,7 @@ class TitleScene extends Phaser.Scene {
         this.plaque.alpha = 0;
         this.plaque.setScale(2);
 
+        //create baddie and player
         this.baddie = this.add.sprite(-60, 410, 'sprites', 'spritesheet_11.png');
         this.baddie.setScale(4);
         this.baddie.flipX = true;
@@ -45,7 +53,7 @@ class TitleScene extends Phaser.Scene {
         this.player = this.add.sprite(-60, 410, 'sprites', 'spritesheet_01.png');
         this.player.setScale(4);
 
-        //enemy anim
+        //baddie anim
         this.anims.create({
             key: 'chew',
             repeat: -1,
@@ -59,6 +67,7 @@ class TitleScene extends Phaser.Scene {
             })
         });
 
+        //player anim
         this.anims.create({
             key: 'walkBrush',
             repeat: -1,
@@ -72,6 +81,7 @@ class TitleScene extends Phaser.Scene {
             })
         });
 
+        //player anim
         this.anims.create({
             key: 'scrubBrush',
             repeat: 4,
@@ -85,20 +95,7 @@ class TitleScene extends Phaser.Scene {
             })
         });
 
-        this.anims.create({
-            key: 'cloud',
-            repeat: 1,
-            frameRate: 7,
-            //hideOnComplete: true,
-            frames: this.anims.generateFrameNames('sprites', {
-                prefix: 'spritesheet_',
-                suffix: '.png',
-                start: 23,
-                end: 26,
-                zeroPad: 2
-            }),
-        });
-
+        //player anim
         this.anims.create({
             key: 'idleBrush',
             repeat: -1,
@@ -111,12 +108,31 @@ class TitleScene extends Phaser.Scene {
                 zeroPad: 2
             })
         });
+
+        //cloud anim
+        this.anims.create({
+            key: 'cloud',
+            repeat: 1,
+            frameRate: 7,
+            frames: this.anims.generateFrameNames('sprites', {
+                prefix: 'spritesheet_',
+                suffix: '.png',
+                start: 23,
+                end: 26,
+                zeroPad: 2
+            }),
+        });
     }
 
     update() {
         var timeElapsed = new Date();
         var delta = (timeElapsed.getSeconds() - this.start.getSeconds());
-        
+
+        //resume music if click off screen
+        // if (this.sound.context.state === 'suspended') {
+        //     this.sound.context.resume();
+        // }
+
         //if plaque:
         if (this.plaque.active) {
             //bring in tooth
@@ -149,7 +165,7 @@ class TitleScene extends Phaser.Scene {
         if (this.baddie.x == 60) {
             var t = this.tweens.add({
                 targets: this.player,
-                duration: 150,
+                duration: 100,
                 scaleX: 5,
                 scaleY: 5,
                 yoyo: true
@@ -164,7 +180,7 @@ class TitleScene extends Phaser.Scene {
         }
 
         if (this.baddie.x > 830) {
-            this.toofTween = this.tweens.add({
+            this.tweens.add({
                 targets: this.tooth,
                 duration: 400,
                 scaleX: 2,
@@ -179,10 +195,10 @@ class TitleScene extends Phaser.Scene {
                 shadow.setScale(2);
                 shadow.tint = 100;
                 shadow.depth -= 1;
-    
+
                 this.tooth.setInteractive();
                 this.tooth.on('pointerdown', () => this.clickButton());
-    
+
                 var text = this.add.text(340, 360, "\t Click to \nGet Scrubbin");
                 text.setFill('#ffa500')
                 text.setStroke('#ffa500', 2.5)
@@ -209,21 +225,8 @@ class TitleScene extends Phaser.Scene {
     }
 
     clickButton() {
-        this.scene.start('gameScene');
+        this.scene.start('gameScene', this.game);
     }
 }
 
-
 export default TitleScene;
-
-
-// animComplete() {
-//     //fade out cloud
-//     var tw = ({
-//         targets: this.plaque,
-//         duration: 1000,
-//         alpha: 0,
-//     });
-//     this.tweens.add(tw)
-//     tw._onCompleteCallback = this.destroy();
-// }

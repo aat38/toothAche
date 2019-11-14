@@ -8,20 +8,23 @@ var gameScene = new GameScene();
 var endScene = new EndScene();
 
 var config = {
-  type: Phaser.AUTO, 
-    width: 800,
-    height: 600,
-    backgroundColor: "#00D7FB", 
-    pixelArt: true,
-    onVisible: true,
-    physics: {
-      default: 'arcade',
-      arcade: {
-          gravity: {y: 500},
-          debug: false
-      }
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  backgroundColor: "#00D7FB",
+  pixelArt: true,
+  onVisible: true,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 500 },
+      debug: false
     }
-  };
+  },
+  audio: {
+    disableWebAudio: true
+  }
+};
 
 //start new game  
 var game = new Phaser.Game(config);
@@ -32,4 +35,4 @@ game.scene.add("game", GameScene);
 game.scene.add("endScene", EndScene);
 
 //start title
-game.scene.start('titleScene');
+game.scene.start('titleScene', game);

@@ -28,7 +28,6 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {  /////////////////////////////////////////////////////////////////////////////////
-        //this.input.keyboard.addKeyCapture([32]);
         this.cursors = this.input.keyboard.createCursorKeys();
         this.spaceKey = this.input.keyboard.addKey(32);
         this.timeElapsed = this.timeElapsed;
@@ -64,24 +63,33 @@ class GameScene extends Phaser.Scene {
         this.plaques[2] = 'spritesheet_32.png';
         this.plaques[3] = 'spritesheet_33.png';
 
-        this.player = this.physics.add.sprite(200, 450, 'sprites', 'spritesheet_01.png');
+        this.player = this.physics.add.sprite(400, 300, 'sprites', 'spritesheet_01.png');
         this.player.enableBody = true;
         this.player.body.collideWorldBounds = true;
-        this.player.body.gravity.y = 300;
+        this.player.body.gravity.y = 1000;
         this.player.setScale(4);
         this.player.depth = 50;
 
-        //platform
         this.braces = this.physics.add.sprite(0, 0, 'braces');
         this.braces.setOrigin(0, 0);
         this.braces.enableBody = true;
         this.braces.body.allowGravity = false;
         this.braces.body.immovable = true;
 
-        // enemy group (baddies)
+        //platform group creation 
+        this.tiles = this.physics.add.group();
+        this.tiles.enableBody = true;
+        this.tiles.physicsBodyType = Phaser.Physics.ARCADE;
+        this.tileCreate(this);
+
+        //enemy group creation (baddies)
         this.enemies = this.physics.add.group();
         this.enemies.enableBody = true;
         this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
+
+        //enable interaction between platforms and player/baddies
+        this.physics.add.collider(this.tiles, this.player);
+        this.physics.add.collider(this.tiles, this.enemies);
 
         //player anim
         this.anims.create({
@@ -199,6 +207,7 @@ class GameScene extends Phaser.Scene {
     }
 
     update() { //////////////////////////////////////////////////////////////////////////////////
+
         var timeElapsed = new Date();
         var delta = (timeElapsed.getSeconds() - this.start.getSeconds());
         if (delta < 0) {
@@ -253,10 +262,6 @@ class GameScene extends Phaser.Scene {
             //}
         }
 
-        //   if (this.physics.overlap(this.player, this.braces)){
-        //     //
-        //   }
-
         if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) {
             this.brush = !this.brush;
         }
@@ -274,9 +279,10 @@ class GameScene extends Phaser.Scene {
             this.player.body.setVelocityX(0);
             this.player.anims.play('idleBrush', true);
         }
-        if (this.cursors.up.isDown && this.player.body.onFloor() && this.brush == true) {
-            this.player.body.setVelocityY(-600); //jump
+        if (this.cursors.up.isDown && this.player.body.checkCollision.down && this.brush == true) {
+            this.player.body.setVelocityY(-300); //jump
         }
+
         ///////sword-state///////////////////
         if (this.cursors.left.isDown && this.brush == false) {
             this.player.body.setVelocityX(-325);
@@ -290,8 +296,8 @@ class GameScene extends Phaser.Scene {
             this.player.body.setVelocityX(0);
             this.player.anims.play('idleSword', true);
         }
-        if (this.cursors.up.isDown && this.player.body.onFloor() && this.brush == false) {
-            this.player.body.setVelocityY(-600);
+        if (this.cursors.up.isDown && this.player.body.checkCollision.down && this.brush == false) {
+            this.player.body.setVelocityY(-300);
         }
         if (this.decayedTeeth > this.maximumAllowedDecay || this.damage >= this.maxDamage) {
             //game over
@@ -350,12 +356,58 @@ class GameScene extends Phaser.Scene {
     }
 
     baddieSpawn(x, y, ctx) {
-        var e = ctx.enemies.create(x, y, 'enemy');
+        var e = ctx.enemies.create(x, y - 100, 'enemy');
         e.name = 'enemy' + x + "_" + y;
         e.setScale(3.5);
         e.body.collideWorldBounds = true;
+        e.body.setBounce(.8);
+        e.body.gravity.y = 800;
         e.body.velocity.x = -250;
         e.beenHit = 0;
+    }
+
+    //painfully create the platform -.- //
+    tileCreate(ctx) {
+        var x = -30;
+        var y = 450;
+        for (var i = 1; i <= 70; i++) {
+            var t = ctx.tiles.create(x, y, 1, 1, 'gums');
+            t.setScale(.5);
+            t.alpha = 0;
+            t.body.immovable = true;
+            t.body.allowGravity = false;
+            x += 15;
+        }
+        x = 0;
+        y = 220;
+        for (var j = 1; j <= 6; j++) {
+            var t = ctx.tiles.create(x, y, 1, 1, 'gums');
+            t.setScale(.5);
+            t.alpha = 0;
+            t.body.immovable = true;
+            t.body.allowGravity = false;
+            x += 15;
+        }
+        x = 215;
+        y = 200;
+        for (var k = 1; k <= 24; k++) {
+            var t = ctx.tiles.create(x, y, 1, 1, 'gums');
+            t.setScale(.5);
+            t.alpha = 0;
+            t.body.immovable = true;
+            t.body.allowGravity = false;
+            x += 15;
+        }
+        x = 715;
+        y = 220;
+        for (var l = 1; l <= 7; l++) {
+            var t = ctx.tiles.create(x, y, 1, 1, 'gums');
+            t.setScale(.5);
+            t.alpha = 0;
+            t.body.immovable = true;
+            t.body.allowGravity = false;
+            x += 15;
+        }
     }
 
     endGame() {

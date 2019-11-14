@@ -9,8 +9,8 @@ class EndScene extends Phaser.Scene {
         this.scene.switch('gameScene');
     }
     init() {
-        var tooth;
-        var text;
+        this.tooth;
+        this.text;
     }
 
     preload() {

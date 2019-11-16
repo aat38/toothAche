@@ -20,10 +20,12 @@ class TitleScene extends Phaser.Scene {
         this.load.image('title', 'assests/title.png');
         this.load.image('plaque', 'assests/spritesheet_32.png');
         this.load.audio('song', 'assests/audio/DJ Nervous - Lurking.mp3')
+        this.load.bitmapFont('carrier_command', 'assests/font/carrier_command.png', 'assests/font/text.xml');
     }
 
     create() {
         this.mus = this.sound.add('song', this.config);
+        this.mus.loop = true; 
         this.mus.play();
 
         var title = this.add.sprite(250, 0, 'title');
@@ -111,7 +113,7 @@ class TitleScene extends Phaser.Scene {
 
         //cloud anim
         this.anims.create({
-            key: 'cloud',
+            key: 'clouds',
             repeat: 1,
             frameRate: 7,
             frames: this.anims.generateFrameNames('sprites', {
@@ -127,11 +129,6 @@ class TitleScene extends Phaser.Scene {
     update() {
         var timeElapsed = new Date();
         var delta = (timeElapsed.getSeconds() - this.start.getSeconds());
-
-        //resume music if click off screen
-        // if (this.sound.context.state === 'suspended') {
-        //     this.sound.context.resume();
-        // }
 
         //if plaque:
         if (this.plaque.active) {
@@ -153,7 +150,7 @@ class TitleScene extends Phaser.Scene {
             //player scrubs off plaque
             if (this.player.x > 370) {
                 this.player.play('scrubBrush', true);
-                this.plaque.play('cloud', true);
+                this.plaque.play('clouds', true);
                 this.plaque.on('animationcomplete', this.destroy, this);
             }
         }
@@ -199,9 +196,8 @@ class TitleScene extends Phaser.Scene {
                 this.tooth.setInteractive();
                 this.tooth.on('pointerdown', () => this.clickButton());
 
-                var text = this.add.text(340, 360, "\t Click to \nGet Scrubbin");
-                text.setFill('#ffa500')
-                text.setStroke('#ffa500', 2.5)
+                var text = this.add.bitmapText(300, 340, 'carrier_command',"  Click to \n\nGet Scrubbin",13);
+                text.tint = 0xFFA500;
             }
         }
     }
@@ -225,7 +221,7 @@ class TitleScene extends Phaser.Scene {
     }
 
     clickButton() {
-        this.scene.start('gameScene', this.game);
+        this.scene.start('strucScene', this.game);
     }
 }
 

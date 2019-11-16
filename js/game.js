@@ -1,11 +1,16 @@
 import TitleScene from './TitleScene.js';
+import StrucScene from './StrucScene.js';
 import GameScene from './GameScene.js';
+import SuccessScene from './SuccessScene.js';
 import EndScene from './EndScene.js';
 
 //create game scenes
 var titleScene = new TitleScene();
+var strucScene = new StrucScene();
 var gameScene = new GameScene();
+var success = new SuccessScene();
 var endScene = new EndScene();
+
 
 var config = {
   type: Phaser.AUTO,
@@ -31,7 +36,9 @@ var game = new Phaser.Game(config);
 
 //load scenes
 game.scene.add('titleScene', TitleScene);
-game.scene.add("game", GameScene);
+game.scene.add('strucScene', StrucScene); //instructions screen
+game.scene.add("gameScene", GameScene);
+game.scene.add('success', SuccessScene);
 game.scene.add("endScene", EndScene);
 
 //start title

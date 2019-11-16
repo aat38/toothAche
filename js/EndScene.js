@@ -1,35 +1,36 @@
 class EndScene extends Phaser.Scene {
 
-	constructor() {
-		super({key:'endScene'});
+    constructor() {
+        super({ key: 'endScene' });
     }
     clickButton() {
-        this.tooth.y = 310;
-        this.text.y=270;
-        this.scene.switch('gameScene');
+        this.scene.start('gameScene', [this.game, this.day]);
     }
-    init() {
-        this.tooth;
-        this.text;
+    init(config) {
+        this.game = config[0];
+        this.day = config[1];
     }
 
     preload() {
         this.load.image('tooth', 'assests/spritesheet_22.png');
+        this.load.bitmapFont('carrier_command', 'assests/font/carrier_command.png', 'assests/font/text.xml');
     }
 
     create() {
-        var shadow = this.add.image(400, 310, 'tooth');
-        shadow.setScale(1.5);
-        shadow.tint = 100;
+        var shadowF = this.add.image(400, 410, 'tooth');
+        shadowF.setScale(1.5);
+        shadowF.tint = 100;
 
-        this.tooth = this.add.image(400, 300, 'tooth');
-        this.tooth.setScale(1.5);
-        this.tooth.setInteractive();
-        this.tooth.on('pointerdown', () => this.clickButton());
+        var toothF = this.add.image(400, 400, 'tooth');
+        toothF.setScale(1.5);
+        toothF.setInteractive();
+        toothF.on('pointerdown', () => this.clickButton());
 
-        this.text = this.add.text(310, 260, "Oh no! You\'ve lost.\n\t\t\t\t\t\t\t :( \nClick to play again");
-        this.text.setFill('#ffa500');
-        this.text.setStroke('#ffa500', 2.5);
+        var txtF = this.add.bitmapText(310, 100, 'carrier_command', 'Oh no!', 25);
+        var txtF2 = this.add.bitmapText(75, 200, 'carrier_command', "You\'ve lost on day " + this.day + " :(", 25);
+        var textF = this.add.bitmapText(310, 350, 'carrier_command', " Click to \n\nplay again", 15);
+        this.day = 0;
+        textF.tint = 0xFFA500;
     }
 }
 

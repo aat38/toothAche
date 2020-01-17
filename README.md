@@ -1,5 +1,5 @@
 # Tooth Ache
-My submission for hackathon, 'Games4SocialImpac 2019.' (Third Place Winner)
+My submission for hackathon, 'Games4SocialImpac 2019' (Third Place Winner).<br>
   ToothAche is a 2D platformer game for elementary-aged children that subtly conveys the importance of good oral hygeine. 
 
 # A work in Progress

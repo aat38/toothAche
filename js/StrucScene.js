@@ -65,7 +65,7 @@ class StrucScene extends Phaser.Scene {
             })
         })
 
-        var instru = this.add.bitmapText(20, 20, 'carrier_command', '  Defend the mouth from \n\n   monsters before bed', 25);
+        var instru = this.add.bitmapText(20, 20, 'carrier_command', '  Defend the mouth from \n\n   all monsters before bed', 25);
 
         //switch weapon 
         var weap = this.add.bitmapText(50, 230, 'carrier_command', 'space = switch weapon', 19);
@@ -74,7 +74,7 @@ class StrucScene extends Phaser.Scene {
         playerSpaceKey.play('weapon', true);
 
         //move
-        var move = this.add.bitmapText(50, 330, 'carrier_command', 'L and R keys = walk', 19);
+        var move = this.add.bitmapText(50, 330, 'carrier_command', '< and > keys = walk', 19);
         var playerMove = this.add.sprite(685, 340, 'sprites', 'spritesheet_01.png');
         playerMove.setScale(2);
         playerMove.play('walk', true);

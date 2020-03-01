@@ -65,7 +65,7 @@ class StrucScene extends Phaser.Scene {
             })
         })
 
-        var instru = this.add.bitmapText(20, 20, 'carrier_command', '  Defend the mouth from \n\n   all monsters before bed', 25);
+        var instru = this.add.bitmapText(20, 20, 'carrier_command', '  Defend the mouth from \n\n  all monsters before bed', 25);
 
         //switch weapon 
         var weap = this.add.bitmapText(50, 230, 'carrier_command', 'space = switch weapon', 19);
